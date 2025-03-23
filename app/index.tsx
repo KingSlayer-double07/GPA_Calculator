@@ -106,62 +106,62 @@ export default function GPACalculator() {
     <View style={styles.container}>
       <Text style={styles.title}>GPA Calculator</Text>
       <ScrollView>
-      <TextInput 
+        <TextInput 
       style={styles.input}
       placeholder="Name this calcullation" 
-      value={gpaName} 
-      onChangeText={setGpaName} 
-      />
-      {courses.map((course, index) => (
+          value={gpaName} 
+          onChangeText={setGpaName}
+        />
+        {courses.map((course, index) => (
         <View key={index} style={styles.courseContainer}>
-          <TextInput
-            placeholder="Course Name"
-            value={course.name}
-            onChangeText={(text) => {
-              const newCourses = [...courses];
-              newCourses[index].name = text;
-              setCourses(newCourses);
-            }}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Credit Units"
-            keyboardType="numeric"
-            value={course.credit}
-            onChangeText={(text) => {
-              const newCourses = [...courses];
-              newCourses[index].credit = text;
-              setCourses(newCourses);
-            }}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Grade (A-F)"
-            value={course.grade}
-            onChangeText={(text) => {
-              const validGrades = ['A', 'B', 'C', 'D', 'F'];
-              const formattedText = text.toUpperCase();
-              if (validGrades.includes(formattedText) || formattedText === '') {
+            <TextInput
+              placeholder="Course Name"
+              value={course.name}
+              onChangeText={(text) => {
                 const newCourses = [...courses];
-                newCourses[index].grade = text;
+                newCourses[index].name = text;
                 setCourses(newCourses);
+              }}
+            style={styles.input}
+            />
+              <TextInput
+            placeholder="Credit Units"
+                keyboardType="numeric"
+                value={course.credit}
+                onChangeText={(text) => {
+                  const newCourses = [...courses];
+                  newCourses[index].credit = text;
+                  setCourses(newCourses);
+                }}
+            style={styles.input}
+              />
+              <TextInput
+            placeholder="Grade (A-F)"
+                value={course.grade}
+                onChangeText={(text) => {
+                  const validGrades = ['A', 'B', 'C', 'D', 'F'];
+                  const formattedText = text.toUpperCase();
+                  if (validGrades.includes(formattedText) || formattedText === '') {
+                    const newCourses = [...courses];
+                newCourses[index].grade = text;
+                    setCourses(newCourses);
               } else {
                 alert("Invalid grade entered. Use A, B, C, D, or F.");
-              }
-            }}
+                  }
+                }}
             style={styles.input}
-          />
-        </View>
-      ))}
+              />
+            </View>
+        ))}
       </ScrollView>
 
       <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.button}  onPress={addCourse}>
-        <Text style={styles.buttonText}>Add Course</Text>
-      </TouchableOpacity>
+          <Text style={styles.buttonText}>Add Course</Text>
+        </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={calculateGPA}>
-        <Text style={styles.buttonText}>Calculate GPA</Text>
-      </TouchableOpacity>
+          <Text style={styles.buttonText}>Calculate GPA</Text>
+        </TouchableOpacity>
       <TouchableOpacity style={[styles.buttonClear, {backgroundColor: "#E63946"}]} onPress={clearScreen}>
         <Text style={styles.buttonText}>Clear Screen</Text>
       </TouchableOpacity>
@@ -172,14 +172,14 @@ export default function GPACalculator() {
 
       {gpa !== null && <Text style={{ fontSize: 20, marginTop: 10 }}>Your GPA: {gpa}</Text>}
       <Text style={styles.historyTitle}>History:</Text>
-      
+
       {history.length > 0 ? (
       <FlatList 
       keyboardDismissMode='on-drag'
-      data={history} 
+          data={history}
       renderItem={({ item }) => <Text style={styles.historyItem}>{item.name}: {item.gpa}</Text>}
       keyExtractor={(item, index) => index.toString()} 
-      />
+        />
       ) : (
       <Text>No history yet.</Text>
       )}
