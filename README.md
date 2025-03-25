@@ -1,5 +1,5 @@
 # GPA Calculator 📊  
-A simple React Native app built with Expo that allows users to calculate and track their Grade Point Average (GPA) efficiently.
+A modern React Native app built with Expo that allows users to calculate and track their Grade Point Average (GPA) efficiently.
 
 ---
 
@@ -8,7 +8,12 @@ A simple React Native app built with Expo that allows users to calculate and tra
 ✔️ Automatically compute GPA  
 ✔️ Save GPA history for future reference  
 ✔️ Clear history when needed  
-✔️ Simple & intuitive UI  
+✔️ Customizable grading scale  
+✔️ Modern tab-based navigation  
+✔️ Smooth animations and transitions  
+✔️ Input validation and error handling  
+✔️ Loading states and visual feedback  
+✔️ Responsive and intuitive UI  
 
 ---
 
@@ -38,25 +43,43 @@ expo start
 ---
 
 ## Usage  
-1. Enter course grades & corresponding credit units  
-2. Tap "Calculate GPA" to compute your result  
-3. View saved GPA history  
-4. Clear history when needed  
+1. Enter a name for your GPA calculation
+2. Add courses with their names, credit units, and grades
+3. Tap "Calculate GPA" to compute your result
+4. View your calculated GPA with a beautiful animation
+5. Access your GPA history in the History tab
+6. Customize your grading scale in the Settings tab
+7. Clear history when needed
 
 ---
 
+## UI Improvements
+- Modern tab-based navigation with icons
+- Smooth fade transitions between sections
+- Beautiful card-based layout
+- Loading indicators for all operations
+- Input validation with helpful error messages
+- Confirmation dialogs for destructive actions
+- Responsive design that works on all screen sizes
+- Clear visual hierarchy and spacing
+- Consistent styling and color scheme
 
 ## Tech Stack  
 - **React Native** (UI & logic)  
 - **Expo** (for development & testing)  
-- **AsyncStorage** (for storing GPA history)  
+- **AsyncStorage** (for storing GPA history & settings)
+- **TypeScript** (for type safety)
+- **Animated API** (for smooth transitions)
 
 ---
 
 ## Future Enhancements  
-🔹 Allow custom grading scales  
-🔹 Add dark mode support  
+🔹 Dark mode support  
 🔹 Export GPA history as PDF  
+🔹 Grade prediction feature
+🔹 Semester tracking
+🔹 Course categories
+🔹 GPA trends visualization
 
 ---
 
