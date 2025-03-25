@@ -7,6 +7,12 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "androidStatusBar": {
+      "hidden": true
+    },
+    "androidNavigationBar": {
+      "visible": "immersive"
+    },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
