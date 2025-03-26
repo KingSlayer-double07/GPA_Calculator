@@ -109,8 +109,8 @@ export default function GPACalculator() {
         'Please fill in all course details before calculating.',
         [{ text: 'OK' }]
       );
-      return;
-    }
+        return;
+      }
 
     const hasInvalidCredits = courses.some(course => 
       isNaN(Number(course.credit)) || Number(course.credit) <= 0
@@ -122,8 +122,8 @@ export default function GPACalculator() {
         'Please enter valid credit units for all courses.',
         [{ text: 'OK' }]
       );
-      return;
-    }
+        return;
+      }
 
     setIsCalculating(true);
     try {
@@ -340,7 +340,7 @@ export default function GPACalculator() {
           <Text style={[styles.tabText, activeSection === 'settings' && styles.activeTabText]}>
             Settings
           </Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
       </View>
 
       <View style={styles.contentContainer}>

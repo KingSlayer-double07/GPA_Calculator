@@ -8,21 +8,23 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "androidStatusBar": {
-      "hidden": true
+      "hidden": true,
+      "backgroundColor": "#0000ff"
     },
     "androidNavigationBar": {
       "visible": "immersive"
     },
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gpacalculator.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#045D5D"
       },
-      "package": "com.kingslayer_double07.GPA_Calculator"
+      "package": "com.gpacalculator.app"
     },
     "web": {
       "bundler": "metro",
@@ -57,6 +59,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/199c44a9-b119-44c9-a6f2-15e4266b0dff"
-    }
+    },
+    "owner": "kingslayer_double07"
   }
 }
