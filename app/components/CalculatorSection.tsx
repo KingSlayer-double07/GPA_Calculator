@@ -14,7 +14,6 @@ interface CalculatorSectionProps {
   onAddCourse: () => void;
   onRemoveCourse: (index: number) => void;
   onCalculate: () => void;
-  fadeAnim: Animated.Value;
   scaleAnim: Animated.Value;
   resultAnim: Animated.Value;
 }
@@ -29,7 +28,6 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   onAddCourse,
   onRemoveCourse,
   onCalculate,
-  fadeAnim,
   resultAnim,
   scaleAnim,
 }) => {
@@ -37,9 +35,6 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     <Animated.View 
       style={[
         styles.section,
-        {
-          opacity: fadeAnim,
-        }
       ]}
     >
       <ScrollView showsVerticalScrollIndicator={false}>

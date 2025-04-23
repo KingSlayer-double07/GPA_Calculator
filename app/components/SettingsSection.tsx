@@ -12,7 +12,6 @@ interface SettingsSectionProps {
   onUpdateGrade: (updatedGrade: GradeScale) => void;
   onResetGradeScale: () => void;
   onCloseModal: () => void;
-  fadeAnim: Animated.Value;
 }
 
 export const SettingsSection: React.FC<SettingsSectionProps> = ({
@@ -23,15 +22,11 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
   onUpdateGrade,
   onResetGradeScale,
   onCloseModal,
-  fadeAnim,
 }) => {
   return (
     <Animated.View 
       style={[
         styles.section,
-        {
-          opacity: fadeAnim,
-        }
       ]}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -86,16 +81,16 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                   value={""}
                   onChangeText={(text) => {
                     const points = parseInt(text) || 0;
-                    onUpdateGrade({ ...editingGrade, points });
+                    onUpdateGrade({ ...editingGrade, points: points.toString() });
                   }}
                   placeholder="Enter points"
                 />
-                <TouchableOpacity 
+                {/*<TouchableOpacity 
                   style={styles.modalCloseButton}
                   onPress={onCloseModal}
                 >
                   <Text style={styles.modalCloseText}>Close</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
               </>
             )}
           </View>

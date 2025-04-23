@@ -9,7 +9,6 @@ interface HistorySectionProps {
   isLoadingHistory: boolean;
   isSaving: boolean;
   onClearHistory: () => void;
-  fadeAnim: Animated.Value;
 }
 
 export const HistorySection: React.FC<HistorySectionProps> = ({
@@ -17,15 +16,11 @@ export const HistorySection: React.FC<HistorySectionProps> = ({
   isLoadingHistory,
   isSaving,
   onClearHistory,
-  fadeAnim,
 }) => {
   return (
     <Animated.View 
       style={[
         styles.section,
-        {
-          opacity: fadeAnim,
-        }
       ]}
     >
       <View style={styles.historyContainer}>
@@ -59,9 +54,6 @@ export const HistorySection: React.FC<HistorySectionProps> = ({
               <Animated.View 
                 style={[
                   styles.historyCard,
-                  {
-                    opacity: fadeAnim,
-                  }
                 ]}
               >
                 <View>

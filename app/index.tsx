@@ -27,7 +27,6 @@ export default function GPACalculator() {
   const [isSaving, setIsSaving] = useState(false);
 
   // Animation values
-  const fadeAnim = new Animated.Value(1);
   const scaleAnim = new Animated.Value(1);
   const resultAnim = new Animated.Value(0);
 
@@ -281,18 +280,7 @@ export default function GPACalculator() {
 
   // Section switching animation
   const switchSection = (section: ActiveSection) => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start(() => {
-      setActiveSection(section);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }).start();
-    });
+    setActiveSection(section);
   };
 
   return (
@@ -347,9 +335,6 @@ export default function GPACalculator() {
         <Animated.View 
           style={[
             styles.section,
-            {
-              opacity: fadeAnim,
-            },
           ]}
         >
           {activeSection === 'calculator' && (
@@ -363,7 +348,6 @@ export default function GPACalculator() {
               onAddCourse={addCourse}
               onRemoveCourse={removeCourse}
               onCalculate={handleCalculate}
-              fadeAnim={fadeAnim}
               resultAnim={resultAnim}
               scaleAnim={scaleAnim}
             />
@@ -375,7 +359,6 @@ export default function GPACalculator() {
               isLoadingHistory={isLoadingHistory}
               isSaving={isSaving}
               onClearHistory={clearHistory}
-              fadeAnim={fadeAnim}
             />
           )}
 
@@ -391,7 +374,6 @@ export default function GPACalculator() {
                 setShowGradeScaleModal(false);
                 setEditingGrade(null);
               }}
-              fadeAnim={fadeAnim}
             />
           )}
         </Animated.View>
