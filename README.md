@@ -55,7 +55,6 @@ expo start
 
 ## UI Improvements
 - Modern tab-based navigation with icons
-- Smooth fade transitions between sections
 - Beautiful card-based layout
 - Loading indicators for all operations
 - Input validation with helpful error messages
