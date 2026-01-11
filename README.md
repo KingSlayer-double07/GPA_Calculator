@@ -1,93 +1,87 @@
-# GPA Calculator 📊  
-A modern React Native app built with Expo that allows users to calculate and track their Grade Point Average (GPA) efficiently.
+# GPA Calculator
+
+A high-performance, cross-platform mobile application designed to help students calculate, track, and manage their academic progress with mathematical accuracy. Built with **TypeScript** and **React Native**, this tool moves beyond simple arithmetic to provide a customizable environment that adapts to various university grading standards.
+
+## Overview
+GPA Calculator offers a seamless user experience for academic tracking. By leveraging local persistence and a modular component architecture, the app allows users to define their own grading scales, store calculation history locally, and manage multiple course loads simultaneously. It is optimized for both performance and clarity, ensuring students can focus on their results rather than the math behind them.
+
+## Features
+*   **Dynamic Course Management**: Add or remove courses on the fly with a responsive interface.
+*   **Customizable Grade Scales**: Fully editable grading system (A-F) with adjustable point values to match specific institutional requirements.
+*   **Persistent Storage**: Automatic saving of GPA history and settings using `AsyncStorage`, ensuring data remains available across sessions.
+*   **Real-time Validation**: Intelligent input validation that prevents calculation errors from empty fields or invalid credit units.
+*   **Modern UI/UX**: Smooth animations powered by `react-native-reanimated` and a clean, accessible design.
+
+## Technologies Used
+
+| Technology | Purpose |
+| :--- | :--- |
+| [React Native](https://reactnative.dev/) | Cross-platform mobile framework |
+| [Expo](https://expo.dev/) | Development workflow and deployment |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety and enhanced developer experience |
+| [Async Storage](https://react-native-async-storage.github.io/async-storage/) | Local data persistence |
+| [Expo Router](https://docs.expo.dev/router/introduction/) | File-based navigation logic |
+| [Vector Icons](https://icons.expo.fyi/) | Scalable interface iconography |
+
+## Getting Started
+
+### Prerequisites
+*   Node.js (LTS version recommended)
+*   npm or yarn
+*   Expo Go app on your mobile device (for physical testing)
+
+### Installation
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/KingSlayer-double07/GPA_Calculator.git
+    cd GPA_Calculator
+    ```
+
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the Development Server**
+    ```bash
+    npx expo start
+    ```
+
+4.  **Run on Device/Emulator**
+    -   Scan the QR code with the Expo Go app (Android/iOS).
+    -   Press `a` for Android Emulator.
+    -   Press `i` for iOS Simulator.
+
+## Usage Guide
+
+### Calculating GPA
+Navigate to the **Calculator** tab. Enter a name for your calculation (e.g., "Year 1 - Semester 1"). Add your courses by providing the course name, credit units, and the grade achieved. Tap "Calculate GPA" to see your result instantly.
+
+### Customizing Grades
+Different schools use different scales (e.g., 4.0 vs 5.0). Go to the **Settings** tab to edit the point values for each grade. You can also reset these to the default 5.0 scale at any time.
+
+### Reviewing History
+Every successful calculation is automatically logged. Switch to the **History** tab to see your previous performance records, including the date of calculation and the specific GPA achieved.
+
+## Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+*   🍴 Fork the Project
+*   🌿 Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+*   💾 Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+*   🚀 Push to the Branch (`git push origin feature/AmazingFeature`)
+*   🔍 Open a Pull Request
+
+## Author
+**[Favour Akande]**
+*   GitHub: [@KingSlayer-double07](https://github.com/KingSlayer-double07)
+*   Twitter: [@favourdslayer]
 
 ---
 
-## Features  
-✔️ Add courses with grades & credit units  
-✔️ Automatically compute GPA  
-✔️ Save GPA history for future reference  
-✔️ Clear history when needed  
-✔️ Customizable grading scale  
-✔️ Modern tab-based navigation  
-✔️ Smooth animations and transitions  
-✔️ Input validation and error handling  
-✔️ Loading states and visual feedback  
-✔️ Responsive and intuitive UI  
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Expo](https://img.shields.io/badge/expo-000020.svg?style=for-the-badge&logo=expo&logoColor=white)
+![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 
----
-
-## Installation & Setup  
-
-### 🛠 Prerequisites  
-- Node.js & npm installed  
-- Expo CLI installed (`npm install -g expo-cli`)  
-- Git installed  
-
-### 👅 Clone the Repository  
-```bash
-git clone https://github.com/KingSlayer-double07/GPA_Calculator
-cd GPA_Calculator
-```
-
-### 🚀 Install Dependencies  
-```bash
-npm install
-```
-
-### 🔥 Run the App  
-```bash
-expo start
-```
-
----
-
-## Usage  
-1. Enter a name for your GPA calculation
-2. Add courses with their names, credit units, and grades
-3. Tap "Calculate GPA" to compute your result
-4. View your calculated GPA with a beautiful animation
-5. Access your GPA history in the History tab
-6. Customize your grading scale in the Settings tab
-7. Clear history when needed
-
----
-
-## UI Improvements
-- Modern tab-based navigation with icons
-- Beautiful card-based layout
-- Loading indicators for all operations
-- Input validation with helpful error messages
-- Confirmation dialogs for destructive actions
-- Responsive design that works on all screen sizes
-- Clear visual hierarchy and spacing
-- Consistent styling and color scheme
-
-## Tech Stack  
-- **React Native** (UI & logic)  
-- **Expo** (for development & testing)  
-- **AsyncStorage** (for storing GPA history & settings)
-- **TypeScript** (for type safety)
-- **Animated API** (for smooth transitions)
-
----
-
-## Future Enhancements  
-🔹 Dark mode support  
-🔹 Export GPA history as PDF  
-🔹 Grade prediction feature
-🔹 Semester tracking
-🔹 Course categories
-🔹 GPA trends visualization
-
----
-
-## Contributing  
-Want to contribute? Feel free to fork the repo, create a new branch, and submit a pull request! 🚀  
-
----
-
-## License  
-This project is open-source and available under the [MIT License](LICENSE).
-
-
+[![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)
