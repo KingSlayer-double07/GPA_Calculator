@@ -26,6 +26,8 @@ export default function Root({ children }: PropsWithChildren) {
         <ScrollViewStyleReset />
 
         {/* Add any additional <head> elements that you want globally available on web... */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9112862070745151"
+     crossorigin="anonymous"></script>
       </head>
       <body>{children}</body>
     </html>
