@@ -7,8 +7,8 @@ import { Screen } from '@/components/Screen';
 import { StorageErrorBanner } from '@/components/StorageErrorBanner';
 import { useAppData } from '@/context/AppDataContext';
 import { Course } from '@/types';
-import { calculateGPA, formatGpa, validateInputs } from '@/utils/calculator';
-import { createCourse } from '@/utils/course';
+import { calculateGPA, validateInputs } from '@/utils/calculator';
+import { createCourse, makeId } from '@/utils/course';
 import { styles } from '@/styles';
 
 export default function CalculatorScreen() {
@@ -63,13 +63,24 @@ export default function CalculatorScreen() {
     if (gpa !== null) return;
 
     const result = calculateGPA(courses, gradeScale);
-    if (!result.isValid || result.gpa === null) {
-      setNotice(result.message ?? 'Check your grades and units, then try again.');
+    if (!result.isValid) {
+      setNotice(result.message);
       return;
     }
 
     setCalculated({ gpa: result.gpa, signature });
-    addHistoryItem({ name: gpaName.trim(), gpa: formatGpa(result.gpa) });
+    addHistoryItem({
+      id: makeId(),
+      name: gpaName.trim(),
+      gpa: result.gpa,
+      createdAt: new Date().toISOString(),
+      details: {
+        totalCredits: result.totalCredits,
+        totalPoints: result.totalPoints,
+        courses: result.courses,
+        gradeScale,
+      },
+    });
   };
 
   return (

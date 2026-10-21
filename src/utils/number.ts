@@ -9,3 +9,12 @@ export const parseDecimal = (text: string): number | null => {
   const value = Number(normalized);
   return Number.isFinite(value) ? value : null;
 };
+
+/**
+ * Rounds to a number of decimal places the way a person would ("1.005" -> 1.01), which
+ * Math.round(x * 100) / 100 and toFixed() get wrong for values like 1.005 that are not exact in binary.
+ */
+export const roundTo = (value: number, places: number): number => {
+  const rounded = Number(`${Math.round(Number(`${value}e${places}`))}e-${places}`);
+  return Number.isFinite(rounded) ? rounded : Number(value.toFixed(places));
+};

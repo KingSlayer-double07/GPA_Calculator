@@ -48,10 +48,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (!active) return;
         historyRef.current = savedHistory;
         setHistory(savedHistory);
-        if (savedScale) {
-          gradeScaleRef.current = savedScale;
-          setGradeScale(savedScale);
-        }
+        gradeScaleRef.current = savedScale;
+        setGradeScale(savedScale);
         canPersistRef.current = true;
       } catch (error) {
         console.error('Error loading saved data:', error);

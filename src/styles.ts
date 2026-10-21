@@ -243,6 +243,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  historyInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
   historyName: {
     fontSize: 16,
     fontWeight: '600',

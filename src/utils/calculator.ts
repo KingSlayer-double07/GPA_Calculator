@@ -1,5 +1,5 @@
-import { Course, GradeScale } from '../types';
-import { parseDecimal } from './number';
+import { CalculatedCourse, Course, GradeScale } from '../types';
+import { parseDecimal, roundTo } from './number';
 
 export interface CourseErrors {
   name?: string;
@@ -62,49 +62,60 @@ export const validateInputs = (
   return errors;
 };
 
-/** GPA as shown to the user, always two decimal places. */
-export const formatGpa = (gpa: number): string => gpa.toFixed(2);
+export type CalculationResult =
+  | {
+      isValid: true;
+      /** Rounded to two decimal places. */
+      gpa: number;
+      totalCredits: number;
+      totalPoints: number;
+      courses: CalculatedCourse[];
+    }
+  | { isValid: false; gpa: null; message: string };
 
-export const calculateGPA = (
-  courses: Course[],
-  gradeScale: GradeScale[]
-): { isValid: boolean; gpa: number | null; message?: string } => {
+export const calculateGPA = (courses: Course[], gradeScale: GradeScale[]): CalculationResult => {
+  const calculated: CalculatedCourse[] = [];
   let totalCredits = 0;
   let totalPoints = 0;
-  let isValid = true;
-  let message = '';
 
-  courses.forEach(({ credit, grade }) => {
+  for (const course of courses) {
+    const { name, credit, grade } = course;
     if (!grade.trim() || !credit.trim()) {
-      isValid = false;
-      message = "All fields (Grade and Credit) must be filled before calculating GPA.";
-      return;
+      return { isValid: false, gpa: null, message: 'All fields (Grade and Credit) must be filled before calculating GPA.' };
     }
     const creditNum = parseDecimal(credit);
     if (creditNum === null || creditNum <= 0) {
-      isValid = false;
-      message = "Credit must be a positive number.";
-      return;
+      return { isValid: false, gpa: null, message: 'Credit must be a positive number.' };
     }
     const gradePoint = getGradePoint(grade, gradeScale);
     if (gradePoint === null) {
-      isValid = false;
-      message = `Grade "${grade}" is not in the grade scale.`;
-      return;
+      return { isValid: false, gpa: null, message: `Grade "${grade}" is not in the grade scale.` };
     }
+    calculated.push({ name: name.trim(), credit: creditNum, grade: grade.toUpperCase(), points: gradePoint });
     totalCredits += creditNum;
     totalPoints += creditNum * gradePoint;
-  });
-
-  if (!isValid) {
-    return { isValid, gpa: null, message };
   }
 
-  const calculatedGPA = totalCredits > 0 ? Number((totalPoints / totalCredits).toFixed(2)) : null;
-  return { isValid: true, gpa: calculatedGPA };
+  if (totalCredits <= 0) {
+    return { isValid: false, gpa: null, message: 'Add at least one course with units above 0.' };
+  }
+
+  // Trim floating-point noise (0.1 + 0.2) before dividing, so the stored totals reproduce the stored GPA.
+  const credits = roundTo(totalCredits, 4);
+  const points = roundTo(totalPoints, 4);
+  return {
+    isValid: true,
+    gpa: roundTo(points / credits, 2),
+    totalCredits: credits,
+    totalPoints: points,
+    courses: calculated,
+  };
 };
 
+/** GPA as shown to the user, always two decimal places. */
+export const formatGpa = (gpa: number): string => gpa.toFixed(2);
+
 export const getGradePoint = (grade: string, gradeScale: GradeScale[]): number | null => {
-  const gradeScaleItem = gradeScale.find(g => g.grade === grade.toUpperCase());
-  return gradeScaleItem ? Number(gradeScaleItem.points) : null;
+  const gradeScaleItem = gradeScale.find((g) => g.grade === grade.toUpperCase());
+  return gradeScaleItem ? gradeScaleItem.points : null;
 };

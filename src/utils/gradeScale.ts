@@ -1,5 +1,5 @@
 import { MIN_GRADE_POINTS, MAX_GRADE_POINTS } from '../constants/gradeScale';
-import { parseDecimal } from './number';
+import { parseDecimal, roundTo } from './number';
 
 export type GradePointsResult = { value: number } | { error: string };
 
@@ -9,5 +9,5 @@ export const parseGradePoints = (text: string): GradePointsResult => {
   if (value === null || value < MIN_GRADE_POINTS || value > MAX_GRADE_POINTS) {
     return { error: `Enter a number from ${MIN_GRADE_POINTS} to ${MAX_GRADE_POINTS}, for example 3.5.` };
   }
-  return { value: Math.round(value * 100) / 100 };
+  return { value: roundTo(value, 2) };
 };

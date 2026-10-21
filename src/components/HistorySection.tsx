@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Icon } from './Icon';
 import { HistoryItem } from '../types';
+import { formatGpa } from '../utils/calculator';
+import { describeHistoryItem } from '../utils/history';
 import { styles } from '../styles';
 
 interface HistorySectionProps {
@@ -35,16 +37,19 @@ export const HistorySection: React.FC<HistorySectionProps> = ({
         ) : history.length > 0 ? (
           <FlatList
             data={history}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.historyCard}>
-                <View>
-                  <Text style={styles.historyName}>{item.name}</Text>
-                  <Text style={styles.historyDate}>Calculated on {new Date().toLocaleDateString()}</Text>
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              const description = describeHistoryItem(item);
+              return (
+                <View style={styles.historyCard}>
+                  <View style={styles.historyInfo}>
+                    <Text style={styles.historyName}>{item.name}</Text>
+                    {description !== '' && <Text style={styles.historyDate}>{description}</Text>}
+                  </View>
+                  <Text style={styles.historyGPA}>{formatGpa(item.gpa)}</Text>
                 </View>
-                <Text style={styles.historyGPA}>{item.gpa}</Text>
-              </View>
-            )}
+              );
+            }}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.historyListContent}
           />
