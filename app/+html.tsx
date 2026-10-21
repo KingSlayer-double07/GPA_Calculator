@@ -12,12 +12,18 @@ export default function Root({ children }: PropsWithChildren) {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta
+          name="description"
+          content="Free GPA calculator for university and secondary school students. Add your courses, set your own grade scale and keep a history of your results."
+        />
 
-        {/* Link the PWA manifest file. */}
+        {/* PWA: manifest, browser theme colour and the icon used when added to an iOS home screen. */}
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#007AFF" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
 
-        {/* Bootstrap the service worker*/}
-        <script dangerouslySetInnerHTML={{ __html: sw }}/>
+        {/* Register the service worker. Production only: `expo start` does not serve /sw.js. */}
+        {process.env.NODE_ENV === 'production' && <script dangerouslySetInnerHTML={{ __html: sw }} />}
 
         {/*
           Disable body scrolling on web. This makes ScrollView components work closer to how they do on native.
@@ -27,7 +33,7 @@ export default function Root({ children }: PropsWithChildren) {
 
         {/* Add any additional <head> elements that you want globally available on web... */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9112862070745151"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
       </head>
       <body>{children}</body>
     </html>

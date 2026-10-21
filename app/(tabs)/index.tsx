@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
+import Head from 'expo-router/head';
 import { CalculatorSection } from '@/components/CalculatorSection';
 import { InlineMessage } from '@/components/InlineMessage';
 import { Screen } from '@/components/Screen';
@@ -73,6 +74,9 @@ export default function CalculatorScreen() {
 
   return (
     <Screen>
+      <Head>
+        <title>GPA Calculator - Calculate your Grade Point Average</title>
+      </Head>
       <StorageErrorBanner />
       {notice && (
         <View style={styles.bannerSlot}>

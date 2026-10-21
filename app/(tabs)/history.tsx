@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'expo-router/head';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { HistorySection } from '@/components/HistorySection';
 import { Screen } from '@/components/Screen';
@@ -11,6 +12,9 @@ export default function HistoryScreen() {
 
   return (
     <Screen>
+      <Head>
+        <title>History - GPA Calculator</title>
+      </Head>
       <StorageErrorBanner />
       <HistorySection
         history={history}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'expo-router/head';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { SettingsSection } from '@/components/SettingsSection';
 import { Screen } from '@/components/Screen';
@@ -13,6 +14,9 @@ export default function SettingsScreen() {
 
   return (
     <Screen>
+      <Head>
+        <title>Grade Scale Settings - GPA Calculator</title>
+      </Head>
       <StorageErrorBanner />
       <SettingsSection
         gradeScale={gradeScale}
