@@ -1,42 +1,28 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Animated } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { Icon } from './Icon';
 import { HistoryItem } from '../types';
 import { styles } from '../styles';
 
 interface HistorySectionProps {
   history: HistoryItem[];
   isLoadingHistory: boolean;
-  isSaving: boolean;
   onClearHistory: () => void;
 }
 
 export const HistorySection: React.FC<HistorySectionProps> = ({
   history,
   isLoadingHistory,
-  isSaving,
   onClearHistory,
 }) => {
   return (
-    <Animated.View 
-      style={[
-        styles.section,
-      ]}
-    >
+    <View style={styles.section}>
       <View style={styles.historyContainer}>
         <View style={styles.historyHeader}>
-          <Text style={styles.historyTitle}>History</Text>
+          <Text style={styles.historyTitle} accessibilityRole="header">History</Text>
           {history.length > 0 && (
-            <TouchableOpacity 
-              onPress={onClearHistory}
-              style={styles.clearHistoryButton}
-              disabled={isSaving}
-            >
-              {isSaving ? (
-                <ActivityIndicator color="#E63946" size="small" />
-              ) : (
-                <MaterialIcons name="delete-outline" size={24} color="#E63946" />
-              )}
+            <TouchableOpacity onPress={onClearHistory} style={styles.clearHistoryButton}>
+              <Icon name="delete-outline" size={24} color="#E63946" />
             </TouchableOpacity>
           )}
         </View>
@@ -50,29 +36,25 @@ export const HistorySection: React.FC<HistorySectionProps> = ({
           <FlatList
             data={history}
             keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <Animated.View 
-                style={[
-                  styles.historyCard,
-                ]}
-              >
+            renderItem={({ item }) => (
+              <View style={styles.historyCard}>
                 <View>
                   <Text style={styles.historyName}>{item.name}</Text>
                   <Text style={styles.historyDate}>Calculated on {new Date().toLocaleDateString()}</Text>
                 </View>
                 <Text style={styles.historyGPA}>{item.gpa}</Text>
-              </Animated.View>
+              </View>
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.historyListContent}
           />
         ) : (
           <View style={styles.emptyState}>
-            <MaterialIcons name="history" size={64} color="#ccc" />
+            <Icon name="history" size={64} color="#ccc" />
             <Text style={styles.emptyStateText}>No calculations yet</Text>
           </View>
         )}
       </View>
-    </Animated.View>
+    </View>
   );
-}; 
+};

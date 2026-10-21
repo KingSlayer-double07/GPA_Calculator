@@ -62,6 +62,9 @@ export const validateInputs = (
   return errors;
 };
 
+/** GPA as shown to the user, always two decimal places. */
+export const formatGpa = (gpa: number): string => gpa.toFixed(2);
+
 export const calculateGPA = (
   courses: Course[],
   gradeScale: GradeScale[]

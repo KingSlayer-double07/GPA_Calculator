@@ -5,33 +5,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
-  contentContainer: {
-    flex: 1,
-    overflow: 'hidden',
-  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-    paddingTop: Platform.OS === 'ios' ? 40 : 10,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  activeTab: {
-    backgroundColor: '#F8F9FA',
-  },
-  tabText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  activeTabText: {
-    color: '#007AFF',
-    fontWeight: '500',
+  hidden: {
+    display: 'none',
   },
   historyContainer: {
     flex: 1,
@@ -192,7 +167,7 @@ export const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 12,
     padding: 20,
     paddingTop: 0,
   },
@@ -202,7 +177,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     padding: 15,
     borderRadius: 12,
-    flex: 0.75,
+    flex: 1,
     justifyContent: 'center',
   },
   calculateButton: {
@@ -211,7 +186,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#007AFF',
     padding: 15,
     borderRadius: 12,
-    flex: 0.75,
+    flex: 1,
     justifyContent: 'center',
   },
   buttonText: {
