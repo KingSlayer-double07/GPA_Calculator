@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Course } from '../types';
+import { Course, GradeScale } from '../types';
 import { ValidationErrors } from '../utils/calculator';
 import { InlineMessage } from './InlineMessage';
 import { styles } from '../styles';
@@ -12,6 +12,7 @@ interface CalculatorSectionProps {
   courses: Course[];
   setCourses: (courses: Course[]) => void;
   gpa: number | null;
+  gradeScale: GradeScale[];
   errors: ValidationErrors;
   showErrors: boolean;
   isCalculating: boolean;
@@ -28,6 +29,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   courses,
   setCourses,
   gpa,
+  gradeScale,
   errors,
   showErrors,
   isCalculating,
@@ -37,6 +39,9 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   resultAnim,
   scaleAnim,
 }) => {
+  // The letters a user can enter are whatever the grade scale defines.
+  const validGrades = gradeScale.map((g) => g.grade.toUpperCase());
+
   return (
     <Animated.View 
       style={[
@@ -50,6 +55,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         </View>
 
         <View style={styles.inputSection}>
+          <Text style={styles.hintText}>Grades: {validGrades.join(', ')}</Text>
+
           <View style={styles.nameField}>
             <TextInput 
               style={[styles.nameInput, showErrors && errors.name ? styles.inputError : null]}
@@ -120,16 +127,16 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                     placeholder="Grade (e.g. A)"
                     value={course.grade}
                     onChangeText={(text) => {
-                      const validGrades = ['A', 'B', 'C', 'D', 'F'];
-                      const formattedText = text.toUpperCase();
-                      if (validGrades.includes(formattedText) || formattedText === '') {
+                      // Take the newest character so typing over an existing letter replaces it,
+                      // and ignore keystrokes that are not a grade in the scale.
+                      const letter = text.trim().slice(-1).toUpperCase();
+                      if (letter === '' || validGrades.includes(letter)) {
                         const newCourses = [...courses];
-                        newCourses[index].grade = text.toUpperCase();
+                        newCourses[index].grade = letter;
                         setCourses(newCourses);
                       }
                     }}
                     style={[styles.courseInput, showErrors && courseErrors.grade ? styles.inputError : null]}
-                    maxLength={1}
                     autoCapitalize="characters"
                   />
                   {showErrors && courseErrors.grade && <Text style={styles.fieldError}>{courseErrors.grade}</Text>}

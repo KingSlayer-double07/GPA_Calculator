@@ -271,6 +271,7 @@ export default function GPACalculator() {
               courses={courses}
               setCourses={setCourses}
               gpa={gpa}
+              gradeScale={gradeScale}
               errors={errors}
               showErrors={showErrors}
               isCalculating={isCalculating}

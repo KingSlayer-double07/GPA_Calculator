@@ -56,6 +56,11 @@ export const styles = StyleSheet.create({
   inputSection: {
     padding: 20,
   },
+  hintText: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 12,
+  },
   nameField: {
     marginBottom: 20,
   },
