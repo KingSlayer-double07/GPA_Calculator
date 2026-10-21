@@ -1,37 +1,13 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { colors } from './theme';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
   },
-  contentContainer: {
-    flex: 1,
-    overflow: 'hidden',
-  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-    paddingTop: Platform.OS === 'ios' ? 40 : 10,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  activeTab: {
-    backgroundColor: '#F8F9FA',
-  },
-  tabText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  activeTabText: {
-    color: '#007AFF',
-    fontWeight: '500',
+  hidden: {
+    display: 'none',
   },
   historyContainer: {
     flex: 1,
@@ -46,22 +22,31 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
   },
   inputSection: {
     padding: 20,
+  },
+  hintText: {
+    fontSize: 13,
+    color: colors.textMuted,
+    marginBottom: 12,
+  },
+  nameField: {
+    marginBottom: 20,
   },
   nameInput: {
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 12,
     fontSize: 14,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -88,47 +73,121 @@ export const styles = StyleSheet.create({
   courseNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   deleteButton: {
     padding: 5,
   },
   courseInput: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  courseField: {
     marginBottom: 10,
   },
   courseDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  smallInput: {
+  smallField: {
     width: '48%',
+    marginBottom: 10,
+  },
+  inputError: {
+    borderColor: colors.danger,
+  },
+  fieldError: {
+    color: colors.error,
+    fontSize: 12,
+    marginTop: 4,
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FDECEA',
+    borderColor: '#F5C2C0',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+  },
+  bannerSlot: {
+    marginHorizontal: 20,
+    marginTop: 12,
+  },
+  bannerText: {
+    flex: 1,
+    color: '#8A1C1C',
+    fontSize: 14,
+    marginHorizontal: 8,
+  },
+  formError: {
+    marginHorizontal: 20,
+    marginTop: 0,
+    marginBottom: 20,
+  },
+  dialogMessage: {
+    fontSize: 15,
+    color: '#444',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  dialogActions: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  dialogButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dialogCancel: {
+    backgroundColor: '#F1F3F5',
+    marginRight: 10,
+  },
+  dialogCancelText: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  dialogPrimary: {
+    backgroundColor: colors.primary,
+  },
+  dialogDestructive: {
+    backgroundColor: colors.error,
+  },
+  dialogButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 12,
     padding: 20,
     paddingTop: 0,
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.success,
     padding: 15,
     borderRadius: 12,
-    flex: 0.75,
+    flex: 1,
     justifyContent: 'center',
   },
   calculateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 15,
     borderRadius: 12,
-    flex: 0.75,
+    flex: 1,
     justifyContent: 'center',
   },
   buttonText: {
@@ -138,7 +197,7 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
   },
   resultCard: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -166,7 +225,7 @@ export const styles = StyleSheet.create({
   historyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   clearHistoryButton: {
     padding: 5,
@@ -185,20 +244,24 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  historyInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
   historyName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
     marginBottom: 5,
   },
   historyDate: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textMuted,
   },
   historyGPA: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
   },
   emptyState: {
     alignItems: 'center',
@@ -206,7 +269,7 @@ export const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 10,
   },
   disabledButton: {
@@ -218,7 +281,7 @@ export const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 10,
   },
   section: {
@@ -236,7 +299,7 @@ export const styles = StyleSheet.create({
   settingsTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   resetButton: {
     padding: 5,
@@ -261,11 +324,11 @@ export const styles = StyleSheet.create({
   gradeText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   pointsText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 2,
   },
   editButton: {
@@ -288,33 +351,28 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#1A1A1A',
+    color: colors.text,
   },
   modalGrade: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
     marginBottom: 10,
   },
   modalInput: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
     width: '100%',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
-  modalCloseButton: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-  },
-  modalCloseText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+  modalError: {
+    textAlign: 'center',
+    marginTop: 0,
+    marginBottom: 10,
   },
 }); 

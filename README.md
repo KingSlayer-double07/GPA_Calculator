@@ -1,67 +1,91 @@
 # GPA Calculator
 
-A high-performance, cross-platform mobile application designed to help students calculate, track, and manage their academic progress with mathematical accuracy. Built with **TypeScript** and **React Native**, this tool moves beyond simple arithmetic to provide a customizable environment that adapts to various university grading standards.
-
-## Overview
-GPA Calculator offers a seamless user experience for academic tracking. By leveraging local persistence and a modular component architecture, the app allows users to define their own grading scales, store calculation history locally, and manage multiple course loads simultaneously. It is optimized for both performance and clarity, ensuring students can focus on their results rather than the math behind them.
+A free GPA calculator for university and secondary-school students. It runs as an installable web app (PWA, deployed on Vercel) and as an Android app, from a single TypeScript codebase. There is no backend: everything is calculated and stored on the user's own device.
 
 ## Features
-*   **Dynamic Course Management**: Add or remove courses on the fly with a responsive interface.
-*   **Customizable Grade Scales**: Fully editable grading system (A-F) with adjustable point values to match specific institutional requirements.
-*   **Persistent Storage**: Automatic saving of GPA history and settings using `AsyncStorage`, ensuring data remains available across sessions.
-*   **Real-time Validation**: Intelligent input validation that prevents calculation errors from empty fields or invalid credit units.
-*   **Modern UI/UX**: Smooth animations powered by `react-native-reanimated` and a clean, accessible design.
+*   **Weighted GPA**: add as many courses as you need, each with a name, units and a grade. The GPA is `Σ(units × grade points) ÷ Σ units`, rounded to two decimal places.
+*   **Your own grade scale**: the default is the 5-point scale (A = 5 … F = 0). Edit the points for any grade, including decimals (0 to 10, so 4.0, 5.0 and 10-point scales all work), or reset to the default.
+*   **History**: every calculation is saved with its name, GPA, date, number of courses and total units, along with the grade scale that was used, so a past result stays correct even if you change the scale later.
+*   **Clear feedback**: every problem is shown next to the field it belongs to, and nothing is silently ignored. The result disappears as soon as an input changes, so it can never be out of date.
+*   **Works offline**: once opened, the web app is cached by a service worker and runs without a connection. Updates install in the background.
+*   **Private**: history and settings live in the browser's local storage (web) or `AsyncStorage` (Android) and are never sent anywhere.
+*   **Accessible**: labelled inputs and buttons, a screen-reader-friendly structure, keyboard support, and text that meets WCAG AA contrast.
 
 ## Technologies Used
 
 | Technology | Purpose |
 | :--- | :--- |
-| [React Native](https://reactnative.dev/) | Cross-platform mobile framework |
-| [Expo](https://expo.dev/) | Development workflow and deployment |
-| [TypeScript](https://www.typescriptlang.org/) | Type safety and enhanced developer experience |
-| [Async Storage](https://react-native-async-storage.github.io/async-storage/) | Local data persistence |
-| [Expo Router](https://docs.expo.dev/router/introduction/) | File-based navigation logic |
-| [Vector Icons](https://icons.expo.fyi/) | Scalable interface iconography |
+| [React Native](https://reactnative.dev/) + [React Native Web](https://necolas.github.io/react-native-web/) | One UI codebase for Android and the web |
+| [Expo](https://expo.dev/) (SDK 52) | Tooling, builds, over-the-air updates |
+| [Expo Router](https://docs.expo.dev/router/introduction/) | File-based routing; the three tabs are real URLs (`/`, `/history`, `/settings`) |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety (`strict` mode) |
+| [Async Storage](https://react-native-async-storage.github.io/async-storage/) | Local persistence |
+| [Workbox](https://developer.chrome.com/docs/workbox) | Service worker generation for offline support |
+| [Vitest](https://vitest.dev/) + [ESLint](https://eslint.org/) | Unit tests and linting |
+| [Vercel](https://vercel.com/) | Hosting for the web app |
 
 ## Getting Started
 
 ### Prerequisites
-*   Node.js (LTS version recommended)
-*   npm or yarn
-*   Expo Go app on your mobile device (for physical testing)
+*   Node.js 20 or newer (CI uses 22)
+*   npm
+*   For Android: [Android Studio](https://developer.android.com/studio) with an emulator or a connected device
 
 ### Installation
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/KingSlayer-double07/GPA_Calculator.git
-    cd GPA_Calculator
-    ```
+```bash
+git clone https://github.com/KingSlayer-double07/GPA_Calculator.git
+cd GPA_Calculator
+npm install
+```
 
-2.  **Install Dependencies**
-    ```bash
-    npm install
-    ```
+### Run it
+```bash
+npm run web        # web app at http://localhost:8081
+npm run android    # Android build on an emulator or device
+```
+The Expo Go app from the stores only supports the newest Expo SDK, so it cannot open this project. To run on a phone, use `npm run android` or build a development client with EAS (`eas build --profile development --platform android`).
 
-3.  **Start the Development Server**
-    ```bash
-    npx expo start
-    ```
+### Scripts
 
-4.  **Run on Device/Emulator**
-    -   Scan the QR code with the Expo Go app (Android/iOS).
-    -   Press `a` for Android Emulator.
-    -   Press `i` for iOS Simulator.
+| Script | What it does |
+| :--- | :--- |
+| `npm run web` / `android` / `start` | Start the app (Expo) |
+| `npm run build:web` | Production web build into `dist/`, then generate the service worker |
+| `npm run typecheck` | TypeScript, no emit |
+| `npm run lint` | ESLint; any warning fails |
+| `npm test` | Unit tests |
 
-## Usage Guide
+## Project Structure
+```
+app/                    Routes only (Expo Router): everything here becomes a page
+  _layout.tsx           Root layout: provides the shared data (history, grade scale)
+  +html.tsx             Web HTML shell: PWA tags, service worker registration
+  (tabs)/               The Calculator, History and Settings tabs
+src/
+  components/           UI building blocks
+  constants/            Default grade scale and the allowed points range
+  context/              AppDataContext: history and grade scale, saved to storage
+  utils/                Calculation, parsing, storage and migration, with unit tests
+  styles.ts, theme.ts, types.ts
+public/                 PWA manifest and icons (copied into the web build)
+workbox-config.js       What the service worker caches
+vercel.json             Build settings, caching and security headers for Vercel
+```
+Keep non-page files out of `app/`: Expo Router turns every file in it into a route.
 
-### Calculating GPA
-Navigate to the **Calculator** tab. Enter a name for your calculation (e.g., "Year 1 - Semester 1"). Add your courses by providing the course name, credit units, and the grade achieved. Tap "Calculate GPA" to see your result instantly.
+## How It Works
 
-### Customizing Grades
-Different schools use different scales (e.g., 4.0 vs 5.0). Go to the **Settings** tab to edit the point values for each grade. You can also reset these to the default 5.0 scale at any time.
+### Saved data
+History and the grade scale are saved under `gpaHistory.v2` and `gradeScale.v2` as `{ "version": 2, ... }`. Data written by earlier versions of the app (`gpaHistory`, `gradeScale`) is migrated the first time it is read: numbers saved as text are converted, unusable entries are dropped, and no date is invented for old entries. The old keys are never modified. Anything unreadable is treated as empty, never as an error that blocks saving. If the device refuses to save, a message says so.
 
-### Reviewing History
-Every successful calculation is automatically logged. Switch to the **History** tab to see your previous performance records, including the date of calculation and the specific GPA achieved.
+### Offline and updates
+`npm run build:web` exports the static site and then generates `dist/sw.js`, which precaches the pages, the JavaScript bundle and the icon font. A new deployment is installed in the background and takes over on the next reload; old caches are removed automatically. The service worker is registered only in production builds.
+
+### Deploying
+The site is deployed on Vercel. `vercel.json` sets the install and build commands, the `dist` output directory and clean URLs, and adds caching and security headers. These settings override those in the Vercel dashboard.
+
+## Quality
+`npm run typecheck`, `npm run lint` and `npm test` (unit tests for the calculation, parsing, rounding and storage migration) run together with a production build in GitHub Actions on every pull request and on pushes to `main`.
 
 ## Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -71,6 +95,8 @@ Contributions are what make the open-source community such an amazing place to l
 *   💾 Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 *   🚀 Push to the Branch (`git push origin feature/AmazingFeature`)
 *   🔍 Open a Pull Request
+
+Please run `npm run typecheck && npm run lint && npm test` before opening a pull request.
 
 ## Author
 **[Favour Akande]**
@@ -83,5 +109,3 @@ Contributions are what make the open-source community such an amazing place to l
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Expo](https://img.shields.io/badge/expo-000020.svg?style=for-the-badge&logo=expo&logoColor=white)
 ![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-
-[![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)

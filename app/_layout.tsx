@@ -1,15 +1,12 @@
-import { Stack } from "expo-router";
-import { StatusBar, View } from "react-native";
-import 'react-native-reanimated';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'react-native';
+import { AppDataProvider } from '@/context/AppDataContext';
 
 export default function RootLayout() {
   return (
-    <View style={{flex: 1}}>
+    <AppDataProvider>
       <StatusBar hidden={true} />
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="history" options={{ headerShown: false }} />
-    </Stack>
-    </View>
+      <Stack screenOptions={{ headerShown: false }} />
+    </AppDataProvider>
   );
 }
