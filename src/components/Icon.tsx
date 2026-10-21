@@ -11,11 +11,22 @@ export type IconProps = React.ComponentProps<typeof MaterialIcons>;
  * already have it when it hydrates. Drawing the glyph on the very first render therefore produces
  * different markup on each side, and React discards the pre-rendered page. A same-sized placeholder
  * keeps the first render identical everywhere and avoids a layout shift.
+ *
+ * Icons are decorative: the control that contains one carries the accessible label, and a screen reader
+ * would otherwise read out the glyph's private-use character.
  */
 export const Icon: React.FC<IconProps> = ({ size = 24, ...props }) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return <View style={{ width: size, height: size }} />;
-  return <MaterialIcons size={size} {...props} />;
+  return (
+    <MaterialIcons
+      aria-hidden
+      accessibilityElementsHidden
+      importantForAccessibility="no"
+      size={size}
+      {...props}
+    />
+  );
 };

@@ -13,6 +13,10 @@ interface ConfirmDialogProps {
   onCancel: () => void;
 }
 
+// react-native-web puts extra Modal props on the dialog element, which is how it gets an accessible name.
+// The React Native typings do not list aria-label for Modal, hence the cast.
+const dialogName = (name: string) => ({ 'aria-label': name }) as object;
+
 // Alert.alert() is a no-op on react-native-web, so confirmations use a Modal that works everywhere.
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   visible,
@@ -24,7 +28,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
 }) => (
-  <Modal visible={visible} transparent animationType="none" onRequestClose={onCancel}>
+  <Modal visible={visible} transparent animationType="none" onRequestClose={onCancel} {...dialogName(title)}>
     <View style={styles.modalContainer}>
       <View style={styles.modalContent} accessibilityViewIsModal>
         <Text style={styles.modalTitle} accessibilityRole="header">{title}</Text>
@@ -34,6 +38,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             style={[styles.dialogButton, styles.dialogCancel]}
             onPress={onCancel}
             disabled={busy}
+            accessibilityRole="button"
           >
             <Text style={styles.dialogCancelText}>Cancel</Text>
           </TouchableOpacity>
@@ -45,6 +50,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             ]}
             onPress={onConfirm}
             disabled={busy}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: busy, busy }}
           >
             {busy ? (
               <ActivityIndicator color="white" size="small" />

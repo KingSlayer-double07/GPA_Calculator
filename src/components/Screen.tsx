@@ -19,7 +19,7 @@ export const Screen: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   );
 
   return (
-    <View style={[styles.container, !focused && styles.hidden]} aria-hidden={!focused}>
+    <View role="main" style={[styles.container, !focused && styles.hidden]} aria-hidden={!focused}>
       {children}
     </View>
   );

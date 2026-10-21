@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Icon } from './Icon';
 import { GradeScale } from '../types';
 import { GradeEditModal } from './GradeEditModal';
+import { colors } from '../theme';
 import { styles } from '../styles';
 
 interface SettingsSectionProps {
@@ -34,8 +35,14 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
         <View style={styles.settingsSection}>
           <View style={styles.settingsHeader}>
             <Text style={styles.settingsTitle}>Grade Scale</Text>
-            <TouchableOpacity onPress={onResetGradeScale} style={styles.resetButton}>
-              <Icon name="refresh" size={24} color="#007AFF" />
+            <TouchableOpacity
+              onPress={onResetGradeScale}
+              style={styles.resetButton}
+              accessibilityRole="button"
+              accessibilityLabel="Reset grade scale to defaults"
+              hitSlop={12}
+            >
+              <Icon name="refresh" size={24} color={colors.primary} />
             </TouchableOpacity>
           </View>
 
@@ -45,8 +52,14 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                 <Text style={styles.gradeText}>{grade.grade}</Text>
                 <Text style={styles.pointsText}>{grade.points} {grade.points === 1 ? 'point' : 'points'}</Text>
               </View>
-              <TouchableOpacity onPress={() => onEditGrade(grade)} style={styles.editButton}>
-                <Icon name="edit" size={24} color="#007AFF" />
+              <TouchableOpacity
+                onPress={() => onEditGrade(grade)}
+                style={styles.editButton}
+                accessibilityRole="button"
+                accessibilityLabel={`Edit points for grade ${grade.grade}`}
+                hitSlop={12}
+              >
+                <Icon name="edit" size={24} color={colors.primary} />
               </TouchableOpacity>
             </View>
           ))}

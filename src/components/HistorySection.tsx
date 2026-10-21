@@ -4,6 +4,7 @@ import { Icon } from './Icon';
 import { HistoryItem } from '../types';
 import { formatGpa } from '../utils/calculator';
 import { describeHistoryItem } from '../utils/history';
+import { colors } from '../theme';
 import { styles } from '../styles';
 
 interface HistorySectionProps {
@@ -23,15 +24,21 @@ export const HistorySection: React.FC<HistorySectionProps> = ({
         <View style={styles.historyHeader}>
           <Text style={styles.historyTitle} accessibilityRole="header">History</Text>
           {history.length > 0 && (
-            <TouchableOpacity onPress={onClearHistory} style={styles.clearHistoryButton}>
-              <Icon name="delete-outline" size={24} color="#E63946" />
+            <TouchableOpacity
+              onPress={onClearHistory}
+              style={styles.clearHistoryButton}
+              accessibilityRole="button"
+              accessibilityLabel="Clear history"
+              hitSlop={12}
+            >
+              <Icon name="delete-outline" size={24} color={colors.danger} />
             </TouchableOpacity>
           )}
         </View>
 
         {isLoadingHistory ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color={colors.primary} accessibilityLabel="Loading history" />
             <Text style={styles.loadingText}>Loading history...</Text>
           </View>
         ) : history.length > 0 ? (

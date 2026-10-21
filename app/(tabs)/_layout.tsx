@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Icon, IconProps } from '@/components/Icon';
+import { colors } from '@/theme';
 
 type IconName = IconProps['name'];
 
@@ -15,12 +16,12 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarPosition: 'top',
         tabBarLabelPosition: 'below-icon',
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#666',
-        tabBarActiveBackgroundColor: '#F8F9FA',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarActiveBackgroundColor: colors.background,
         tabBarLabelStyle: { fontSize: 12 },
         tabBarItemStyle: { paddingVertical: 8 },
-        tabBarStyle: { height: 68, backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#E5E5E5' },
+        tabBarStyle: { height: 68, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border },
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Calculator', tabBarIcon: tabIcon('calculate') }} />

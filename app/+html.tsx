@@ -1,4 +1,5 @@
 import { ScrollViewStyleReset } from 'expo-router/html';
+import { colors } from '@/theme';
 import type { PropsWithChildren } from 'react';
 
 // This file is web-only and used to configure the root HTML for every
@@ -19,7 +20,9 @@ export default function Root({ children }: PropsWithChildren) {
 
         {/* PWA: manifest, browser theme colour and the icon used when added to an iOS home screen. */}
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#007AFF" />
+        <meta name="theme-color" content={colors.primary} />
+        {/* The app has a light theme only; keeps browsers from darkening form controls and scrollbars. */}
+        <meta name="color-scheme" content="light" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
 
         {/* Register the service worker. Production only: `expo start` does not serve /sw.js. */}

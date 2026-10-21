@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { colors } from './theme';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
   },
   hidden: {
     display: 'none',
@@ -21,19 +22,19 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
   },
   inputSection: {
     padding: 20,
   },
   hintText: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textMuted,
     marginBottom: 12,
   },
   nameField: {
@@ -72,13 +73,13 @@ export const styles = StyleSheet.create({
   courseNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   deleteButton: {
     padding: 5,
   },
   courseInput: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
@@ -97,10 +98,10 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputError: {
-    borderColor: '#E63946',
+    borderColor: colors.danger,
   },
   fieldError: {
-    color: '#C62828',
+    color: colors.error,
     fontSize: 12,
     marginTop: 4,
   },
@@ -150,15 +151,15 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   dialogCancelText: {
-    color: '#1A1A1A',
+    color: colors.text,
     fontSize: 16,
     fontWeight: '600',
   },
   dialogPrimary: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
   },
   dialogDestructive: {
-    backgroundColor: '#C62828',
+    backgroundColor: colors.error,
   },
   dialogButtonText: {
     color: 'white',
@@ -174,7 +175,7 @@ export const styles = StyleSheet.create({
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.success,
     padding: 15,
     borderRadius: 12,
     flex: 1,
@@ -183,7 +184,7 @@ export const styles = StyleSheet.create({
   calculateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 15,
     borderRadius: 12,
     flex: 1,
@@ -196,7 +197,7 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
   },
   resultCard: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -224,7 +225,7 @@ export const styles = StyleSheet.create({
   historyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   clearHistoryButton: {
     padding: 5,
@@ -250,17 +251,17 @@ export const styles = StyleSheet.create({
   historyName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
     marginBottom: 5,
   },
   historyDate: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textMuted,
   },
   historyGPA: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
   },
   emptyState: {
     alignItems: 'center',
@@ -268,7 +269,7 @@ export const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 10,
   },
   disabledButton: {
@@ -280,7 +281,7 @@ export const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 10,
   },
   section: {
@@ -298,7 +299,7 @@ export const styles = StyleSheet.create({
   settingsTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   resetButton: {
     padding: 5,
@@ -323,11 +324,11 @@ export const styles = StyleSheet.create({
   gradeText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: colors.text,
   },
   pointsText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 2,
   },
   editButton: {
@@ -350,16 +351,16 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#1A1A1A',
+    color: colors.text,
   },
   modalGrade: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
     marginBottom: 10,
   },
   modalInput: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
     padding: 12,
     borderRadius: 8,
     fontSize: 16,

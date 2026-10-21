@@ -4,6 +4,7 @@ import { Icon } from './Icon';
 import { Course, GradeScale } from '../types';
 import { ValidationErrors, formatGpa } from '../utils/calculator';
 import { InlineMessage } from './InlineMessage';
+import { colors } from '../theme';
 import { styles } from '../styles';
 
 interface CalculatorSectionProps {
@@ -20,6 +21,9 @@ interface CalculatorSectionProps {
   onRemoveCourse: (id: string) => void;
   onCalculate: () => void;
 }
+
+/** Placeholders are not labels, so each input gets a label that also carries its current error. */
+const labelWithError = (label: string, error?: string) => (error ? `${label}. ${error}` : label);
 
 export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   gpaName,
@@ -53,9 +57,10 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             <TextInput
               style={[styles.nameInput, showErrors && errors.name ? styles.inputError : null]}
               placeholder="Name this calculation (e.g. 100 level first semester)"
+              accessibilityLabel={labelWithError('Name of this calculation', showErrors ? errors.name : undefined)}
               value={gpaName}
               onChangeText={onChangeName}
-              placeholderTextColor="#666"
+              placeholderTextColor={colors.placeholder}
             />
             {showErrors && errors.name && <Text style={styles.fieldError}>{errors.name}</Text>}
           </View>
@@ -70,8 +75,11 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                     <TouchableOpacity
                       onPress={() => onRemoveCourse(course.id)}
                       style={styles.deleteButton}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Remove course ${index + 1}`}
+                      hitSlop={12}
                     >
-                      <Icon name="remove-circle" size={24} color="#E63946" />
+                      <Icon name="remove-circle" size={24} color={colors.danger} />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -79,6 +87,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                 <View style={styles.courseField}>
                   <TextInput
                     placeholder="Course Name (e.g. GES 101)"
+                    placeholderTextColor={colors.placeholder}
+                    accessibilityLabel={labelWithError(`Course ${index + 1} name`, showErrors ? courseErrors.name : undefined)}
                     value={course.name}
                     onChangeText={(name) => onChangeCourse(course.id, { name })}
                     style={[styles.courseInput, showErrors && courseErrors.name ? styles.inputError : null]}
@@ -90,6 +100,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   <View style={styles.smallField}>
                     <TextInput
                       placeholder="Units (e.g. 3)"
+                      placeholderTextColor={colors.placeholder}
+                      accessibilityLabel={labelWithError(`Course ${index + 1} units`, showErrors ? courseErrors.credit : undefined)}
                       keyboardType="numeric"
                       value={course.credit}
                       onChangeText={(credit) => onChangeCourse(course.id, { credit })}
@@ -101,6 +113,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   <View style={styles.smallField}>
                     <TextInput
                       placeholder="Grade (e.g. A)"
+                      placeholderTextColor={colors.placeholder}
+                      accessibilityLabel={labelWithError(`Course ${index + 1} grade`, showErrors ? courseErrors.grade : undefined)}
                       value={course.grade}
                       onChangeText={(text) => {
                         // Take the newest character so typing over an existing letter replaces it,
@@ -122,7 +136,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         </View>
 
         <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.addButton} onPress={onAddCourse}>
+          <TouchableOpacity style={styles.addButton} onPress={onAddCourse} accessibilityRole="button">
             <Icon name="add" size={24} color="white" />
             <Text style={styles.buttonText}>Add Course</Text>
           </TouchableOpacity>
@@ -131,6 +145,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             style={[styles.calculateButton, calculateDisabled && styles.disabledButton]}
             onPress={onCalculate}
             disabled={calculateDisabled}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: calculateDisabled }}
           >
             <Icon name="calculate" size={24} color="white" />
             <Text style={styles.buttonText}>Calculate GPA</Text>
@@ -145,12 +161,15 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
           </View>
         )}
 
-        {gpa !== null && (
-          <View style={styles.resultCard}>
-            <Text style={styles.resultLabel}>Your GPA</Text>
-            <Text style={styles.resultValue}>{formatGpa(gpa)}</Text>
-          </View>
-        )}
+        {/* Always rendered: a live region has to exist before its content appears to be announced. */}
+        <View accessibilityLiveRegion="polite">
+          {gpa !== null && (
+            <View style={styles.resultCard}>
+              <Text style={styles.resultLabel}>Your GPA</Text>
+              <Text style={styles.resultValue}>{formatGpa(gpa)}</Text>
+            </View>
+          )}
+        </View>
       </ScrollView>
     </View>
   );

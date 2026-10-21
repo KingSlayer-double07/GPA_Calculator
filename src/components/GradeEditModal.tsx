@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { GradeScale } from '../types';
 import { parseGradePoints } from '../utils/gradeScale';
+import { colors } from '../theme';
 import { styles } from '../styles';
 
 interface GradeEditModalProps {
@@ -36,19 +37,26 @@ const GradeEditForm: React.FC<{
         onChangeText={setDraft}
         onSubmitEditing={save}
         placeholder="Enter points"
+        placeholderTextColor={colors.placeholder}
         accessibilityLabel={`Points for grade ${grade.grade}`}
         autoFocus
         selectTextOnFocus
       />
       {error && <Text style={[styles.fieldError, styles.modalError]}>{error}</Text>}
       <View style={styles.dialogActions}>
-        <TouchableOpacity style={[styles.dialogButton, styles.dialogCancel]} onPress={onCancel}>
+        <TouchableOpacity
+          style={[styles.dialogButton, styles.dialogCancel]}
+          onPress={onCancel}
+          accessibilityRole="button"
+        >
           <Text style={styles.dialogCancelText}>Cancel</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.dialogButton, styles.dialogPrimary, !('value' in parsed) && styles.disabledButton]}
           onPress={save}
           disabled={!('value' in parsed)}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: !('value' in parsed) }}
         >
           <Text style={styles.dialogButtonText}>Save</Text>
         </TouchableOpacity>
@@ -57,8 +65,12 @@ const GradeEditForm: React.FC<{
   );
 };
 
+// react-native-web puts extra Modal props on the dialog element, which is how it gets an accessible name.
+// The React Native typings do not list aria-label for Modal, hence the cast.
+const dialogName = { 'aria-label': 'Edit grade points' } as object;
+
 export const GradeEditModal: React.FC<GradeEditModalProps> = ({ visible, grade, onSave, onCancel }) => (
-  <Modal visible={visible} transparent animationType="none" onRequestClose={onCancel}>
+  <Modal visible={visible} transparent animationType="none" onRequestClose={onCancel} {...dialogName}>
     <View style={styles.modalContainer}>
       <View style={styles.modalContent} accessibilityViewIsModal>
         {/* Mounted only while editing, so every open starts from the grade's current points. */}
