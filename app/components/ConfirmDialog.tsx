@@ -28,19 +28,19 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <View style={styles.modalContainer}>
       <View style={styles.modalContent} accessibilityViewIsModal>
         <Text style={styles.modalTitle} accessibilityRole="header">{title}</Text>
-        <Text style={styles.confirmMessage}>{message}</Text>
-        <View style={styles.confirmActions}>
+        <Text style={styles.dialogMessage}>{message}</Text>
+        <View style={styles.dialogActions}>
           <TouchableOpacity
-            style={[styles.confirmButton, styles.confirmCancel]}
+            style={[styles.dialogButton, styles.dialogCancel]}
             onPress={onCancel}
             disabled={busy}
           >
-            <Text style={styles.confirmCancelText}>Cancel</Text>
+            <Text style={styles.dialogCancelText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
-              styles.confirmButton,
-              destructive ? styles.confirmDestructive : styles.confirmPrimary,
+              styles.dialogButton,
+              destructive ? styles.dialogDestructive : styles.dialogPrimary,
               busy && styles.disabledButton,
             ]}
             onPress={onConfirm}
@@ -49,7 +49,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             {busy ? (
               <ActivityIndicator color="white" size="small" />
             ) : (
-              <Text style={styles.confirmButtonText}>{confirmLabel}</Text>
+              <Text style={styles.dialogButtonText}>{confirmLabel}</Text>
             )}
           </TouchableOpacity>
         </View>

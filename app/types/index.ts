@@ -13,7 +13,7 @@ export interface HistoryItem {
 
 export interface GradeScale {
   grade: string;
-  points: string;
+  points: number;
 }
 
 export type ActiveSection = 'calculator' | 'history' | 'settings';

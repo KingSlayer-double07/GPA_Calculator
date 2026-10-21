@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Modal, Animated } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { GradeScale } from '../types';
+import { GradeEditModal } from './GradeEditModal';
 import { styles } from '../styles';
 
 interface SettingsSectionProps {
@@ -50,7 +51,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
             <View key={index} style={styles.gradeScaleItem}>
               <View style={styles.gradeScaleInfo}>
                 <Text style={styles.gradeText}>{grade.grade}</Text>
-                <Text style={styles.pointsText}>{grade.points} points</Text>
+                <Text style={styles.pointsText}>{grade.points} {grade.points === 1 ? 'point' : 'points'}</Text>
               </View>
               <TouchableOpacity 
                 onPress={() => onEditGrade(grade)}
@@ -63,39 +64,12 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
         </View>
       </ScrollView>
 
-      <Modal
+      <GradeEditModal
         visible={showGradeScaleModal}
-        transparent
-        animationType="slide"
-        onRequestClose={onCloseModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Edit Grade Scale</Text>
-            {editingGrade && (
-              <>
-                <Text style={styles.modalGrade}>{editingGrade.grade}</Text>
-                <TextInput
-                  style={styles.modalInput}
-                  keyboardType="numeric"
-                  value={""}
-                  onChangeText={(text) => {
-                    const points = parseInt(text) || 0;
-                    onUpdateGrade({ ...editingGrade, points: points.toString() });
-                  }}
-                  placeholder="Enter points"
-                />
-                {/*<TouchableOpacity 
-                  style={styles.modalCloseButton}
-                  onPress={onCloseModal}
-                >
-                  <Text style={styles.modalCloseText}>Close</Text>
-                </TouchableOpacity>*/}
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
+        grade={editingGrade}
+        onSave={(points) => editingGrade && onUpdateGrade({ ...editingGrade, points })}
+        onCancel={onCloseModal}
+      />
     </Animated.View>
   );
 }; 

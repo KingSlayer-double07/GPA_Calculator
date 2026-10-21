@@ -148,39 +148,39 @@ export const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 20,
   },
-  confirmMessage: {
+  dialogMessage: {
     fontSize: 15,
     color: '#444',
     textAlign: 'center',
     marginBottom: 20,
   },
-  confirmActions: {
+  dialogActions: {
     flexDirection: 'row',
     width: '100%',
   },
-  confirmButton: {
+  dialogButton: {
     flex: 1,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  confirmCancel: {
+  dialogCancel: {
     backgroundColor: '#F1F3F5',
     marginRight: 10,
   },
-  confirmCancelText: {
+  dialogCancelText: {
     color: '#1A1A1A',
     fontSize: 16,
     fontWeight: '600',
   },
-  confirmPrimary: {
+  dialogPrimary: {
     backgroundColor: '#007AFF',
   },
-  confirmDestructive: {
+  dialogDestructive: {
     backgroundColor: '#C62828',
   },
-  confirmButtonText: {
+  dialogButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
@@ -381,18 +381,13 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     width: '100%',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
-  modalCloseButton: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-  },
-  modalCloseText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+  modalError: {
+    textAlign: 'center',
+    marginTop: 0,
+    marginBottom: 10,
   },
 }); 
