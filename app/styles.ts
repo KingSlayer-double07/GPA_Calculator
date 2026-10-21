@@ -56,12 +56,16 @@ export const styles = StyleSheet.create({
   inputSection: {
     padding: 20,
   },
+  nameField: {
+    marginBottom: 20,
+  },
   nameInput: {
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 12,
     fontSize: 14,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -98,14 +102,88 @@ export const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  courseField: {
     marginBottom: 10,
   },
   courseDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  smallInput: {
+  smallField: {
     width: '48%',
+    marginBottom: 10,
+  },
+  inputError: {
+    borderColor: '#E63946',
+  },
+  fieldError: {
+    color: '#C62828',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FDECEA',
+    borderColor: '#F5C2C0',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+  },
+  bannerSlot: {
+    marginHorizontal: 20,
+    marginTop: 12,
+  },
+  bannerText: {
+    flex: 1,
+    color: '#8A1C1C',
+    fontSize: 14,
+    marginHorizontal: 8,
+  },
+  formError: {
+    marginHorizontal: 20,
+    marginTop: 0,
+    marginBottom: 20,
+  },
+  confirmMessage: {
+    fontSize: 15,
+    color: '#444',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  confirmActions: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  confirmButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmCancel: {
+    backgroundColor: '#F1F3F5',
+    marginRight: 10,
+  },
+  confirmCancelText: {
+    color: '#1A1A1A',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  confirmPrimary: {
+    backgroundColor: '#007AFF',
+  },
+  confirmDestructive: {
+    backgroundColor: '#C62828',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
   actionButtons: {
     flexDirection: 'row',

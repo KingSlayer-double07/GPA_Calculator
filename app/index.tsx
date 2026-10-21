@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, Animated, Platform, StatusBar, Alert, Dimensions } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, TouchableOpacity, Text, Animated, StatusBar } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CalculatorSection } from './components/CalculatorSection';
 import { HistorySection } from './components/HistorySection';
 import { SettingsSection } from './components/SettingsSection';
+import { ConfirmDialog } from './components/ConfirmDialog';
+import { InlineMessage } from './components/InlineMessage';
 import { Course, HistoryItem, GradeScale, ActiveSection } from './types';
 import { DEFAULT_GRADE_SCALE } from './constants/gradeScale';
 import { saveHistory, loadHistory, saveGradeScale, loadGradeScale } from './utils/storage';
-import { calculateGPA } from './utils/calculator';
+import { calculateGPA, validateInputs } from './utils/calculator';
 import { styles } from './styles';
 
 export default function GPACalculator() {
@@ -21,6 +23,11 @@ export default function GPACalculator() {
   const [showGradeScaleModal, setShowGradeScaleModal] = useState(false);
   const [editingGrade, setEditingGrade] = useState<GradeScale | null>(null);
 
+  // Validation / feedback. Alert.alert() does nothing on web, so feedback is rendered in the page.
+  const [showErrors, setShowErrors] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<'clear-history' | 'reset-scale' | null>(null);
+
   // Loading states
   const [isCalculating, setIsCalculating] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -29,6 +36,11 @@ export default function GPACalculator() {
   // Animation values
   const scaleAnim = new Animated.Value(1);
   const resultAnim = new Animated.Value(0);
+
+  const errors = useMemo(
+    () => validateInputs(gpaName, courses, gradeScale),
+    [gpaName, courses, gradeScale]
+  );
 
   // Load saved data on mount
   useEffect(() => {
@@ -46,6 +58,7 @@ export default function GPACalculator() {
       if (savedGradeScale) setGradeScale(savedGradeScale);
     } catch (error) {
       console.error('Error loading saved data:', error);
+      setNotice('Could not load your saved history and grade scale. Defaults are being used.');
     } finally {
       setIsLoadingHistory(false);
     }
@@ -53,14 +66,7 @@ export default function GPACalculator() {
 
   // Course management functions
   const addCourse = () => {
-    /*if (courses.length >= 10) {
-      Alert.alert(
-        'Maximum Courses Reached',
-        'You can only add up to 10 courses at a time.',
-        [{ text: 'OK' }]
-      );
-      return;
-    }*/
+    setShowErrors(false);
     setCourses([...courses, { name: '', credit: '', grade: '' }]);
     Animated.spring(scaleAnim, {
       toValue: 1.1,
@@ -74,102 +80,52 @@ export default function GPACalculator() {
   };
 
   const removeCourse = (index: number) => {
-    if (courses.length <= 1) {
-      Alert.alert(
-        'Cannot Remove Course',
-        'You must have at least one course.',
-        [{ text: 'OK' }]
-      );
-      return;
-    }
-    const newCourses = courses.filter((_, i) => i !== index);
-    setCourses(newCourses);
+    if (courses.length <= 1) return;
+    setCourses(courses.filter((_, i) => i !== index));
   };
 
   // GPA calculation
   const handleCalculate = async () => {
-    // Validate inputs before calculation
-    if (!gpaName.trim()) {
-      Alert.alert(
-        'Missing Name',
-        'Please enter a name for this GPA calculation.',
-        [{ text: 'OK' }]
-      );
+    if (errors.count > 0) {
+      setShowErrors(true);
       return;
     }
-
-    const hasEmptyFields = courses.some(course => 
-      !course.name.trim() || !course.credit.trim() || !course.grade.trim()
-    );
-
-    if (hasEmptyFields) {
-      Alert.alert(
-        'Incomplete Course Information',
-        'Please fill in all course details before calculating.',
-        [{ text: 'OK' }]
-      );
-        return;
-      }
-
-    const hasInvalidCredits = courses.some(course => 
-      isNaN(Number(course.credit)) || Number(course.credit) <= 0
-    );
-
-    if (hasInvalidCredits) {
-      Alert.alert(
-        'Invalid Credits',
-        'Please enter valid credit units for all courses.',
-        [{ text: 'OK' }]
-      );
-        return;
-      }
+    setShowErrors(false);
+    setNotice(null);
 
     setIsCalculating(true);
     try {
       const result = calculateGPA(courses, gradeScale);
-      
+
       if (result.isValid && result.gpa !== null) {
         setGpa(result.gpa);
         Animated.spring(resultAnim, {
           toValue: 1,
           useNativeDriver: true,
         }).start();
-        
-        // Save to history
+
         const newHistoryItem: HistoryItem = {
           name: gpaName.trim(),
           gpa: result.gpa.toFixed(2),
         };
-        
+        const newHistory = [newHistoryItem, ...history];
+        setHistory(newHistory);
+
         setIsSaving(true);
         try {
-          const newHistory = [newHistoryItem, ...history];
           await saveHistory(newHistory);
-          setHistory(newHistory);
         } catch (error) {
-          Alert.alert(
-            'Error Saving History',
-            'Failed to save the calculation to history. Please try again.',
-            [{ text: 'OK' }]
-          );
           console.error('Error saving history:', error);
+          setNotice('Your GPA was calculated, but it could not be saved to history on this device.');
         } finally {
           setIsSaving(false);
         }
       } else {
-        Alert.alert(
-          'Invalid Grades',
-          'Please check your grade inputs. Make sure they match the grade scale.',
-          [{ text: 'OK' }]
-        );
+        setNotice(result.message ?? 'Check your grades and units, then try again.');
       }
     } catch (error) {
-      Alert.alert(
-        'Calculation Error',
-        'An error occurred while calculating your GPA. Please try again.',
-        [{ text: 'OK' }]
-      );
       console.error('Error calculating GPA:', error);
+      setNotice('Something went wrong while calculating your GPA. Please try again.');
     } finally {
       setIsCalculating(false);
     }
@@ -177,36 +133,16 @@ export default function GPACalculator() {
 
   // History management
   const clearHistory = async () => {
-    Alert.alert(
-      'Clear History',
-      'Are you sure you want to clear all your GPA calculation history?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: async () => {
-            setIsSaving(true);
-            try {
-              await saveHistory([]);
-              setHistory([]);
-            } catch (error) {
-              Alert.alert(
-                'Error Clearing History',
-                'Failed to clear history. Please try again.',
-                [{ text: 'OK' }]
-              );
-              console.error('Error clearing history:', error);
-            } finally {
-              setIsSaving(false);
-            }
-          },
-        },
-      ]
-    );
+    setIsSaving(true);
+    try {
+      await saveHistory([]);
+      setHistory([]);
+    } catch (error) {
+      console.error('Error clearing history:', error);
+      setNotice('Could not clear your history. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Grade scale management
@@ -216,19 +152,6 @@ export default function GPACalculator() {
   };
 
   const handleUpdateGrade = async (updatedGrade: GradeScale) => {
-    {
-      /* Feature to validate grade scale points 
-    if (isNaN(Number(updatedGrade.points)) || Number(updatedGrade.points) < 0 || Number(updatedGrade.points) > 4.0) {
-      Alert.alert(
-        'Invalid Points',
-        'Grade points must be between 0 and 4.0.',
-        [{ text: 'OK' }]
-      );
-      return;
-    }
-    */
-   }
-
     const newGradeScale = gradeScale.map(g => 
       g.grade === updatedGrade.grade ? updatedGrade : g
     );
@@ -239,43 +162,41 @@ export default function GPACalculator() {
     try {
       await saveGradeScale(newGradeScale);
     } catch (error) {
-      Alert.alert(
-        'Error Saving Grade Scale',
-        'Failed to save the grade scale changes. Please try again.',
-        [{ text: 'OK' }]
-      );
       console.error('Error saving grade scale:', error);
+      setNotice('Could not save your grade scale changes on this device.');
     }
   };
 
-  const handleResetGradeScale = async () => {
-    Alert.alert(
-      'Reset Grade Scale',
-      'Are you sure you want to reset the grade scale to default values?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Reset',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setGradeScale(DEFAULT_GRADE_SCALE);
-              await saveGradeScale(DEFAULT_GRADE_SCALE);
-            } catch (error) {
-              Alert.alert(
-                'Error Resetting Grade Scale',
-                'Failed to reset the grade scale. Please try again.',
-                [{ text: 'OK' }]
-              );
-              console.error('Error resetting grade scale:', error);
-            }
-          },
-        },
-      ]
-    );
+  const resetGradeScale = async () => {
+    setGradeScale(DEFAULT_GRADE_SCALE);
+    try {
+      await saveGradeScale(DEFAULT_GRADE_SCALE);
+    } catch (error) {
+      console.error('Error resetting grade scale:', error);
+      setNotice('Could not reset your grade scale. Please try again.');
+    }
+  };
+
+  const confirmDialog = pendingConfirm === 'clear-history'
+    ? {
+        title: 'Clear History',
+        message: 'Are you sure you want to clear all your GPA calculation history?',
+        confirmLabel: 'Clear',
+        run: clearHistory,
+      }
+    : pendingConfirm === 'reset-scale'
+    ? {
+        title: 'Reset Grade Scale',
+        message: 'Are you sure you want to reset the grade scale to default values?',
+        confirmLabel: 'Reset',
+        run: resetGradeScale,
+      }
+    : null;
+
+  const handleConfirm = async () => {
+    const action = confirmDialog;
+    setPendingConfirm(null);
+    if (action) await action.run();
   };
 
   // Section switching animation
@@ -331,6 +252,12 @@ export default function GPACalculator() {
       </TouchableOpacity>
       </View>
 
+      {notice && (
+        <View style={styles.bannerSlot}>
+          <InlineMessage message={notice} onDismiss={() => setNotice(null)} />
+        </View>
+      )}
+
       <View style={styles.contentContainer}>
         <Animated.View 
           style={[
@@ -344,6 +271,8 @@ export default function GPACalculator() {
               courses={courses}
               setCourses={setCourses}
               gpa={gpa}
+              errors={errors}
+              showErrors={showErrors}
               isCalculating={isCalculating}
               onAddCourse={addCourse}
               onRemoveCourse={removeCourse}
@@ -358,7 +287,7 @@ export default function GPACalculator() {
               history={history}
               isLoadingHistory={isLoadingHistory}
               isSaving={isSaving}
-              onClearHistory={clearHistory}
+              onClearHistory={() => setPendingConfirm('clear-history')}
             />
           )}
 
@@ -369,7 +298,7 @@ export default function GPACalculator() {
               editingGrade={editingGrade}
               onEditGrade={handleEditGrade}
               onUpdateGrade={handleUpdateGrade}
-              onResetGradeScale={handleResetGradeScale}
+              onResetGradeScale={() => setPendingConfirm('reset-scale')}
               onCloseModal={() => {
                 setShowGradeScaleModal(false);
                 setEditingGrade(null);
@@ -378,6 +307,16 @@ export default function GPACalculator() {
           )}
         </Animated.View>
       </View>
+
+      <ConfirmDialog
+        visible={confirmDialog !== null}
+        title={confirmDialog?.title ?? ''}
+        message={confirmDialog?.message ?? ''}
+        confirmLabel={confirmDialog?.confirmLabel ?? ''}
+        destructive
+        onConfirm={handleConfirm}
+        onCancel={() => setPendingConfirm(null)}
+      />
     </View>
   );
 }

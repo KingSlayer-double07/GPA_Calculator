@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Course } from '../types';
+import { ValidationErrors } from '../utils/calculator';
+import { InlineMessage } from './InlineMessage';
 import { styles } from '../styles';
 
 interface CalculatorSectionProps {
@@ -10,6 +12,8 @@ interface CalculatorSectionProps {
   courses: Course[];
   setCourses: (courses: Course[]) => void;
   gpa: number | null;
+  errors: ValidationErrors;
+  showErrors: boolean;
   isCalculating: boolean;
   onAddCourse: () => void;
   onRemoveCourse: (index: number) => void;
@@ -24,6 +28,8 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   courses,
   setCourses,
   gpa,
+  errors,
+  showErrors,
   isCalculating,
   onAddCourse,
   onRemoveCourse,
@@ -44,15 +50,20 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         </View>
 
         <View style={styles.inputSection}>
-          <TextInput 
-            style={styles.nameInput}
-            placeholder="Name this calculation (e.g. 100 level first semester)" 
-            value={gpaName} 
-            onChangeText={setGpaName}
-            placeholderTextColor="#666" 
-          />
+          <View style={styles.nameField}>
+            <TextInput 
+              style={[styles.nameInput, showErrors && errors.name ? styles.inputError : null]}
+              placeholder="Name this calculation (e.g. 100 level first semester)" 
+              value={gpaName} 
+              onChangeText={setGpaName}
+              placeholderTextColor="#666" 
+            />
+            {showErrors && errors.name && <Text style={styles.fieldError}>{errors.name}</Text>}
+          </View>
 
-          {courses.map((course, index) => (
+          {courses.map((course, index) => {
+            const courseErrors = errors.courses[index] ?? {};
+            return (
             <Animated.View 
               key={index} 
               style={[
@@ -74,49 +85,59 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                 )}
               </View>
               
-              <TextInput
-                placeholder="Course Name (e.g. GES 101)"
-                value={course.name}
-                onChangeText={(text) => {
-                  const newCourses = [...courses];
-                  newCourses[index].name = text;
-                  setCourses(newCourses);
-                }}
-                style={styles.courseInput}
-              />
-              
-              <View style={styles.courseDetails}>
+              <View style={styles.courseField}>
                 <TextInput
-                  placeholder="Units (e.g. 3)"
-                  keyboardType="numeric"
-                  value={course.credit}
+                  placeholder="Course Name (e.g. GES 101)"
+                  value={course.name}
                   onChangeText={(text) => {
                     const newCourses = [...courses];
-                    newCourses[index].credit = text;
+                    newCourses[index].name = text;
                     setCourses(newCourses);
                   }}
-                  style={[styles.courseInput, styles.smallInput]}
+                  style={[styles.courseInput, showErrors && courseErrors.name ? styles.inputError : null]}
                 />
-                
-                <TextInput
-                  placeholder="Grade (e.g. A)"
-                  value={course.grade}
-                  onChangeText={(text) => {
-                    const validGrades = ['A', 'B', 'C', 'D', 'F'];
-                    const formattedText = text.toUpperCase();
-                    if (validGrades.includes(formattedText) || formattedText === '') {
+                {showErrors && courseErrors.name && <Text style={styles.fieldError}>{courseErrors.name}</Text>}
+              </View>
+              
+              <View style={styles.courseDetails}>
+                <View style={styles.smallField}>
+                  <TextInput
+                    placeholder="Units (e.g. 3)"
+                    keyboardType="numeric"
+                    value={course.credit}
+                    onChangeText={(text) => {
                       const newCourses = [...courses];
-                      newCourses[index].grade = text.toUpperCase();
+                      newCourses[index].credit = text;
                       setCourses(newCourses);
-                    }
-                  }}
-                  style={[styles.courseInput, styles.smallInput]}
-                  maxLength={1}
-                  autoCapitalize="characters"
-                />
+                    }}
+                    style={[styles.courseInput, showErrors && courseErrors.credit ? styles.inputError : null]}
+                  />
+                  {showErrors && courseErrors.credit && <Text style={styles.fieldError}>{courseErrors.credit}</Text>}
+                </View>
+                
+                <View style={styles.smallField}>
+                  <TextInput
+                    placeholder="Grade (e.g. A)"
+                    value={course.grade}
+                    onChangeText={(text) => {
+                      const validGrades = ['A', 'B', 'C', 'D', 'F'];
+                      const formattedText = text.toUpperCase();
+                      if (validGrades.includes(formattedText) || formattedText === '') {
+                        const newCourses = [...courses];
+                        newCourses[index].grade = text.toUpperCase();
+                        setCourses(newCourses);
+                      }
+                    }}
+                    style={[styles.courseInput, showErrors && courseErrors.grade ? styles.inputError : null]}
+                    maxLength={1}
+                    autoCapitalize="characters"
+                  />
+                  {showErrors && courseErrors.grade && <Text style={styles.fieldError}>{courseErrors.grade}</Text>}
+                </View>
               </View>
             </Animated.View>
-          ))}
+            );
+          })}
         </View>
 
         <View style={styles.actionButtons}>
@@ -145,6 +166,14 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             </TouchableOpacity>
           </Animated.View>
         </View>
+
+        {showErrors && errors.count > 0 && (
+          <View style={styles.formError}>
+            <InlineMessage
+              message={`Fix ${errors.count} highlighted ${errors.count === 1 ? 'field' : 'fields'} above to calculate your GPA.`}
+            />
+          </View>
+        )}
 
         {gpa !== null && (
           <Animated.View 
