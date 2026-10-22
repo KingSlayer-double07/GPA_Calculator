@@ -3,6 +3,7 @@
   "framework": null,
   "installCommand": "npm ci",
   "buildCommand": "npm run build:web",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "headers": [
     {
